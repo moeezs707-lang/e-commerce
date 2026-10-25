@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IBRAQ | Royal Customizer Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen">
+
+  <div class="max-w-6xl mx-auto px-6 py-10">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-6 mb-8">
+      <div>
+        <h1 class="text-2xl font-bold text-amber-400">IBRAQ Storefront Customizer</h1>
+        <p class="text-xs text-slate-400">Secured Royal Admin Panel</p>
+      </div>
+      <button id="admin-logout" onclick="logoutAdmin()" class="bg-red-500/20 text-red-400 px-4 py-1.5 text-xs uppercase rounded border border-red-500/30">Exit Panel</button>
+    </div>
+
+    <div id="admin-auth-gate" class="bg-slate-900 border border-slate-800 p-8 rounded max-w-md mx-auto">
+      <h2 class="text-lg font-bold text-amber-400 mb-4">Royal Admin Login</h2>
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase text-slate-400 mb-1">Admin Email</label>
+          <input type="email" id="admin-email" required class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded outline-none focus:border-amber-400" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase text-slate-400 mb-1">Password</label>
+          <input type="password" id="admin-password" required class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded outline-none focus:border-amber-400" />
+        </div>
+        <button type="submit" class="w-full bg-amber-500 text-black font-semibold py-2.5 text-xs uppercase rounded">Access Dashboard</button>
+      </form>
+    </div>
+
+    <div id="admin-dashboard" class="hidden space-y-12">
+      <section class="bg-slate-900 border border-slate-800 p-6 rounded">
+        <h2 class="text-lg font-bold text-amber-400 mb-4">Live Site Customization</h2>
+        <form onsubmit="saveSettings(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Browser Page Title</label>
+            <input type="text" id="cfg-site_title" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Brand Subtitle</label>
+            <input type="text" id="cfg-brand_subtitle" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs uppercase text-slate-400 mb-1">Announcement Ticker Message</label>
+            <input type="text" id="cfg-ticker_message" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Hero Title</label>
+            <input type="text" id="cfg-hero_title" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Hero Image URL</label>
+            <input type="text" id="cfg-hero_image" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div class="md:col-span-2">
+            <button type="submit" class="bg-amber-500 text-black px-6 py-2 text-xs font-semibold uppercase rounded">Save Site Customizations</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="bg-slate-900 border border-slate-800 p-6 rounded">
+        <h2 class="text-lg font-bold text-amber-400 mb-4">Add Single Fragrance Product</h2>
+        <form onsubmit="createProduct(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Title</label>
+            <input type="text" id="p-title" required class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Category</label>
+            <select id="p-category" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded">
+              <option>Best Sellers</option>
+              <option>For Him</option>
+              <option>For Her</option>
+              <option>The Fall Edit</option>
+              <option>Gifts</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Price ($)</label>
+            <input type="number" step="0.01" id="p-price" required class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-xs uppercase text-slate-400 mb-1">Description</label>
+            <textarea id="p-description" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded"></textarea>
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Top Notes</label>
+            <input type="text" id="p-top_notes" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Heart Notes</label>
+            <input type="text" id="p-heart_notes" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">Base Notes</label>
+            <input type="text" id="p-base_notes" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">External Image URL</label>
+            <input type="text" id="p-image_url" class="w-full bg-slate-950 border border-slate-800 px-3 py-2 text-sm rounded" placeholder="https://..." />
+          </div>
+          <div>
+            <label class="block text-xs uppercase text-slate-400 mb-1">OR Local Image File</label>
+            <input type="file" id="p-image_file" class="w-full text-xs text-slate-400" />
+          </div>
+          <div class="flex items-center">
+            <label class="inline-flex items-center text-xs text-slate-300">
+              <input type="checkbox" id="p-is_featured" class="mr-2" /> Feature on Homepage
+            </label>
+          </div>
+          <div class="md:col-span-3">
+            <button type="submit" class="bg-amber-500 text-black px-6 py-2 text-xs font-semibold uppercase rounded">Publish Fragrance</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="bg-slate-900 border border-slate-800 p-6 rounded">
+        <h2 class="text-lg font-bold text-amber-400 mb-2">Bulk JSON Importer</h2>
+        <p class="text-xs text-slate-400 mb-4">Paste a JSON array of products linked to external image URLs to import in bulk.</p>
+        <textarea id="bulk-json" rows="6" class="w-full bg-slate-950 border border-slate-800 p-3 text-xs font-mono rounded" placeholder='[{"title":"Aura Oud","category":"Best Sellers","price":300,"image_url":"https://..."}]'></textarea>
+        <button onclick="importBulkJSON()" class="mt-3 bg-amber-500 text-black px-6 py-2 text-xs font-semibold uppercase rounded">Execute Bulk Import</button>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    let adminToken = localStorage.getItem('ibraq_admin_token');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (adminToken) {
+        showDashboard();
+      }
+    });
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value;
+      const password = document.getElementById('admin-password').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok && data.user.role === 'admin') {
+          adminToken = data.token;
+          localStorage.setItem('ibraq_admin_token', adminToken);
+          showDashboard();
+        } else {
+          alert('Unauthorized: You must be an admin.');
+        }
+      } catch (err) {
+        alert('Login failed');
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('admin-auth-gate').classList.add('hidden');
+      document.getElementById('admin-dashboard').classList.remove('hidden');
+      loadCurrentSettings();
+    }
+
+    function logoutAdmin() {
+      localStorage.removeItem('ibraq_admin_token');
+      location.reload();
+    }
+
+    async function loadCurrentSettings() {
+      const res = await fetch('/api/settings');
+      const settings = await res.json();
+      for (const [key, value] of Object.entries(settings)) {
+        const input = document.getElementById(`cfg-${key}`);
+        if (input) input.value = value;
+      }
+    }
+
+    async function saveSettings(e) {
+      e.preventDefault();
+      const payload = {
+        site_title: document.getElementById('cfg-site_title').value,
+        brand_subtitle: document.getElementById('cfg-brand_subtitle').value,
+        ticker_message: document.getElementById('cfg-ticker_message').value,
+        hero_title: document.getElementById('cfg-hero_title').value,
+        hero_image: document.getElementById('cfg-hero_image').value
+      };
+
+      const res = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) alert('Settings saved successfully!');
+      else alert('Failed to save settings.');
+    }
+
+    async function createProduct(e) {
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append('title', document.getElementById('p-title').value);
+      formData.append('category', document.getElementById('p-category').value);
+      formData.append('price', document.getElementById('p-price').value);
+      formData.append('description', document.getElementById('p-description').value);
+      formData.append('top_notes', document.getElementById('p-top_notes').value);
+      formData.append('heart_notes', document.getElementById('p-heart_notes').value);
+      formData.append('base_notes', document.getElementById('p-base_notes').value);
+      formData.append('image_url', document.getElementById('p-image_url').value);
+      formData.append('is_featured', document.getElementById('p-is_featured').checked);
+
+      const fileInput = document.getElementById('p-image_file');
+      if (fileInput.files[0]) {
+        formData.append('image_file', fileInput.files[0]);
+      }
+
+      const res = await fetch('/api/admin/products', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${adminToken}` },
+        body: formData
+      });
+
+      if (res.ok) {
+        alert('Product created!');
+        e.target.reset();
+      } else {
+        alert('Failed to create product.');
+      }
+    }
+
+    async function importBulkJSON() {
+      const raw = document.getElementById('bulk-json').value;
+      try {
+        const products = JSON.parse(raw);
+        const res = await fetch('/api/admin/products/bulk', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${adminToken}`
+          },
+          body: JSON.stringify({ products })
+        });
+        const data = await res.json();
+        if (res.ok) alert(data.message);
+        else alert(data.error);
+      } catch (e) {
+        alert('Invalid JSON format');
+      }
+    }
+  </script>
+</body>
+</html>

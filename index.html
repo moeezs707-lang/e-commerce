@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">IBRAQ | Ibrahim Al-Qurashi USA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            gold: {
+              400: '#E5C158',
+              500: '#D4AF37',
+              600: '#AA820A',
+            },
+            obsidian: '#0B0B0C',
+            charcoal: '#141416'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-obsidian text-stone-200 font-sans antialiased min-h-screen flex flex-col selection:bg-gold-500 selection:text-black">
+
+  <div id="announcement-ticker" class="bg-gold-500 text-obsidian text-xs font-medium py-2 px-4 text-center uppercase tracking-widest transition-all">
+    Loading luxury updates...
+  </div>
+
+  <header class="sticky top-0 z-40 bg-obsidian/90 backdrop-blur-md border-b border-gold-500/20">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#home" onclick="navigateTo('home')" class="flex flex-col">
+        <span id="brand-title" class="font-serif text-3xl font-bold tracking-widest text-gold-500 uppercase">IBRAQ</span>
+        <span id="brand-subtitle" class="text-[9px] tracking-[0.25em] text-stone-400 uppercase">Ibrahim Al-Qurashi USA</span>
+      </a>
+
+      <nav class="hidden md:flex space-x-8 text-xs font-medium uppercase tracking-widest text-stone-300">
+        <button onclick="navigateTo('home')" class="hover:text-gold-400 transition">Home</button>
+        <button onclick="navigateTo('shop')" class="hover:text-gold-400 transition">Catalog</button>
+        <button onclick="navigateTo('member-lounge')" class="text-gold-500 hover:text-gold-400 font-semibold flex items-center gap-1">
+          <span>✨</span> VIP Lounge
+        </button>
+        <button onclick="navigateTo('wishlist')" class="hover:text-gold-400 transition">Wishlist (<span id="wishlist-count">0</span>)</button>
+      </nav>
+
+      <div class="flex items-center space-x-5">
+        <button onclick="toggleCart(true)" class="relative text-stone-200 hover:text-gold-400 transition flex items-center">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span id="cart-count" class="absolute -top-2 -right-2 bg-gold-500 text-black font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
+        </button>
+        <button id="nav-auth-btn" onclick="navigateTo('auth')" class="border border-gold-500/40 text-gold-400 px-4 py-1.5 text-xs tracking-widest uppercase hover:bg-gold-500 hover:text-black transition">
+          Sign In
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <section id="page-home" class="spa-page">
+      <div class="relative h-[80vh] flex items-center justify-center bg-cover bg-center" id="hero-banner" style="background-image: url('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1600&q=80');">
+        <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/60 to-transparent"></div>
+        <div class="relative z-10 text-center max-w-3xl px-6">
+          <p class="text-xs uppercase tracking-[0.4em] text-gold-400 mb-4">Authentic Oriental Extraits</p>
+          <h1 id="hero-title" class="font-serif text-5xl md:text-7xl text-stone-100 font-bold tracking-wide mb-6">The Crown Jewel of Arabian Perfumery</h1>
+          <p id="hero-subtitle" class="text-stone-300 text-sm md:text-base font-light tracking-wide mb-8 max-w-xl mx-auto">Immerse yourself in aged Cambodian Oud, Taif Rose, and Amber Intense.</p>
+          <button onclick="navigateTo('shop')" class="bg-gold-500 text-obsidian px-8 py-3.5 text-xs font-semibold tracking-widest uppercase hover:bg-gold-400 transition">Explore The Collection</button>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-6 py-20">
+        <div class="text-center mb-12">
+          <h2 class="font-serif text-3xl md:text-4xl text-stone-100 uppercase tracking-widest">Featured Creations</h2>
+          <div class="w-16 h-0.5 bg-gold-500 mx-auto mt-3"></div>
+        </div>
+        <div id="featured-products-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+      </div>
+    </section>
+
+    <section id="page-shop" class="spa-page hidden max-w-7xl mx-auto px-6 py-12">
+      <div class="text-center mb-10">
+        <h1 class="font-serif text-4xl text-stone-100 uppercase tracking-widest">Perfume Library</h1>
+        <p class="text-stone-400 text-xs tracking-widest mt-2">Crafted with pure oils & traditional distillation</p>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-4 mb-12 border-b border-stone-800 pb-4 text-xs tracking-widest uppercase">
+        <button onclick="filterCategory('All')" class="cat-tab active text-gold-400 font-semibold border-b-2 border-gold-400 pb-1">All</button>
+        <button onclick="filterCategory('Best Sellers')" class="cat-tab text-stone-400 hover:text-stone-200 pb-1">Best Sellers</button>
+        <button onclick="filterCategory('For Him')" class="cat-tab text-stone-400 hover:text-stone-200 pb-1">For Him</button>
+        <button onclick="filterCategory('For Her')" class="cat-tab text-stone-400 hover:text-stone-200 pb-1">For Her</button>
+        <button onclick="filterCategory('The Fall Edit')" class="cat-tab text-stone-400 hover:text-stone-200 pb-1">The Fall Edit</button>
+        <button onclick="filterCategory('Gifts')" class="cat-tab text-stone-400 hover:text-stone-200 pb-1">Gifts</button>
+      </div>
+
+      <div id="catalog-products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+    </section>
+
+    <section id="page-pdp" class="spa-page hidden max-w-6xl mx-auto px-6 py-16">
+      <div id="pdp-content" class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"></div>
+    </section>
+
+    <section id="page-member-lounge" class="spa-page hidden max-w-5xl mx-auto px-6 py-16">
+      <div id="lounge-lockscreen" class="text-center py-20 border border-gold-500/20 bg-charcoal p-10 rounded">
+        <span class="text-5xl mb-4 block">👑</span>
+        <h2 class="font-serif text-3xl text-gold-400 uppercase tracking-widest mb-3">VIP Royal Member Lounge</h2>
+        <p class="text-stone-300 text-sm max-w-md mx-auto mb-8">This private sanctuary is reserved exclusively for IBRAQ members. Sign in or create an account to unlock masterclasses, private codes, and bespoke scent consultations.</p>
+        <button onclick="navigateTo('auth')" class="bg-gold-500 text-obsidian px-8 py-3 text-xs font-semibold uppercase tracking-widest hover:bg-gold-400">Sign In to Enter</button>
+      </div>
+
+      <div id="lounge-dashboard" class="hidden">
+        <div class="border border-gold-500/30 bg-charcoal p-8 rounded mb-8">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-stone-800 pb-6 mb-6">
+            <div>
+              <span class="text-xs text-gold-400 uppercase tracking-widest">Royal Loyalty Rank</span>
+              <h2 id="lounge-welcome" class="font-serif text-3xl text-stone-100">Welcome Member</h2>
+            </div>
+            <span class="mt-4 md:mt-0 bg-gold-500/10 text-gold-400 border border-gold-500/40 px-4 py-1 text-xs uppercase tracking-widest rounded-full">Imperial Tier</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="font-serif text-xl text-gold-400 mb-4">Exclusive Private Perks</h3>
+              <ul id="lounge-perks" class="space-y-3 text-xs text-stone-300 list-disc list-inside"></ul>
+            </div>
+            <div class="bg-obsidian p-6 border border-stone-800 rounded">
+              <h3 class="font-serif text-xl text-gold-400 mb-2">Secret VIP Vault Code</h3>
+              <p class="text-xs text-stone-400 mb-4">Use this promo code at checkout for 25% off all extraits:</p>
+              <div id="lounge-code" class="text-lg font-mono font-bold bg-gold-500/20 text-gold-400 text-center py-2 border border-dashed border-gold-500 rounded mb-4">
+                LOADING...
+              </div>
+              <p id="lounge-consult" class="text-xs text-stone-300 italic"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-wishlist" class="spa-page hidden max-w-7xl mx-auto px-6 py-16">
+      <h1 class="font-serif text-3xl text-stone-100 uppercase tracking-widest text-center mb-8">Your Curated Wishlist</h1>
+      <div id="wishlist-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+    </section>
+
+    <section id="page-auth" class="spa-page hidden max-w-md mx-auto px-6 py-16">
+      <div class="bg-charcoal border border-stone-800 p-8 rounded shadow-xl">
+        <div class="flex justify-center space-x-6 border-b border-stone-800 pb-4 mb-6 text-sm uppercase tracking-widest">
+          <button id="auth-tab-login" onclick="switchAuthTab('login')" class="text-gold-400 font-semibold border-b-2 border-gold-400 pb-1">Sign In</button>
+          <button id="auth-tab-register" onclick="switchAuthTab('register')" class="text-stone-400 hover:text-stone-200 pb-1">Register</button>
+        </div>
+
+        <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-stone-400 mb-1">Email Address</label>
+            <input type="email" id="login-email" required class="w-full bg-obsidian border border-stone-800 text-stone-200 px-4 py-2.5 text-xs focus:border-gold-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-stone-400 mb-1">Password</label>
+            <input type="password" id="login-password" required class="w-full bg-obsidian border border-stone-800 text-stone-200 px-4 py-2.5 text-xs focus:border-gold-500 outline-none" />
+          </div>
+          <button type="submit" class="w-full bg-gold-500 text-obsidian font-semibold py-3 text-xs uppercase tracking-widest hover:bg-gold-400 transition">Enter Sanctuary</button>
+        </form>
+
+        <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-stone-400 mb-1">Full Name</label>
+            <input type="text" id="reg-name" required class="w-full bg-obsidian border border-stone-800 text-stone-200 px-4 py-2.5 text-xs focus:border-gold-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-stone-400 mb-1">Email Address</label>
+            <input type="email" id="reg-email" required class="w-full bg-obsidian border border-stone-800 text-stone-200 px-4 py-2.5 text-xs focus:border-gold-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-widest text-stone-400 mb-1">Password</label>
+            <input type="password" id="reg-password" required class="w-full bg-obsidian border border-stone-800 text-stone-200 px-4 py-2.5 text-xs focus:border-gold-500 outline-none" />
+          </div>
+          <button type="submit" class="w-full bg-gold-500 text-obsidian font-semibold py-3 text-xs uppercase tracking-widest hover:bg-gold-400 transition">Create Royal Account</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div id="cart-drawer-backdrop" onclick="toggleCart(false)" class="fixed inset-0 bg-black/70 z-50 opacity-0 pointer-events-none transition-opacity"></div>
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-charcoal border-l border-stone-800 z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-6 border-b border-stone-800 flex justify-between items-center">
+      <h3 class="font-serif text-xl text-stone-100 uppercase tracking-widest">Your Bag</h3>
+      <button onclick="toggleCart(false)" class="text-stone-400 hover:text-stone-100 text-xl">&times;</button>
+    </div>
+
+    <div class="p-4 bg-obsidian border-b border-stone-800">
+      <div class="flex justify-between text-xs mb-1">
+        <span id="shipping-progress-text" class="text-stone-300">Add $200.00 for Free Royal Express Shipping</span>
+        <span id="shipping-progress-percent" class="text-gold-400 font-bold">0%</span>
+      </div>
+      <div class="w-full bg-stone-800 h-1.5 rounded-full overflow-hidden">
+        <div id="shipping-bar" class="bg-gold-500 h-full w-0 transition-all duration-300"></div>
+      </div>
+    </div>
+
+    <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4"></div>
+
+    <div class="p-6 border-t border-stone-800 bg-obsidian">
+      <div class="flex justify-between text-sm mb-4">
+        <span class="uppercase tracking-widest text-stone-400">Subtotal</span>
+        <span id="cart-subtotal" class="font-serif text-lg text-gold-400">$0.00</span>
+      </div>
+      <button onclick="alert('Order successfully placed! Thank you for choosing IBRAQ.')" class="w-full bg-gold-500 text-obsidian font-semibold py-3 text-xs uppercase tracking-widest hover:bg-gold-400 transition">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <footer class="bg-obsidian border-t border-stone-800 text-stone-500 text-xs py-10 px-6 text-center">
+    <p class="uppercase tracking-widest mb-2">IBRAQ • Ibrahim Al-Qurashi USA</p>
+    <p>&copy; 2026 All Rights Reserved. Crafted for Haute Parfumerie Enthusiasts.</p>
+  </footer>
+
+  <script>
+    let products = [];
+    let cart = [];
+    let wishlist = [];
+    let currentUser = JSON.parse(localStorage.getItem('ibraq_user')) || null;
+    let authToken = localStorage.getItem('ibraq_token') || null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchSettings();
+      fetchProducts();
+      updateAuthUI();
+      handleRouting();
+    });
+
+    window.addEventListener('hashchange', handleRouting);
+
+    function handleRouting() {
+      const hash = window.location.hash.replace('#', '') || 'home';
+      document.querySelectorAll('.spa-page').forEach(el => el.classList.add('hidden'));
+
+      const target = document.getElementById(`page-${hash}`);
+      if (target) {
+        target.classList.remove('hidden');
+      } else {
+        document.getElementById('page-home').classList.remove('hidden');
+      }
+
+      if (hash === 'member-lounge') {
+        loadMemberLounge();
+      }
+    }
+
+    function navigateTo(pageHash) {
+      window.location.hash = pageHash;
+    }
+
+    async function fetchSettings() {
+      try {
+        const res = await fetch('/api/settings');
+        const settings = await res.json();
+        
+        if (settings.site_title) document.title = settings.site_title;
+        if (settings.brand_subtitle) document.getElementById('brand-subtitle').innerText = settings.brand_subtitle;
+        if (settings.ticker_message) document.getElementById('announcement-ticker').innerText = settings.ticker_message;
+        if (settings.hero_title) document.getElementById('hero-title').innerText = settings.hero_title;
+        if (settings.hero_subtitle) document.getElementById('hero-subtitle').innerText = settings.hero_subtitle;
+        if (settings.hero_image) document.getElementById('hero-banner').style.backgroundImage = `url('${settings.hero_image}')`;
+      } catch (err) {
+        console.error('Settings fetch error:', err);
+      }
+    }
+
+    async function fetchProducts(category = 'All') {
+      try {
+        const res = await fetch(`/api/products${category !== 'All' ? '?category=' + encodeURIComponent(category) : ''}`);
+        products = await res.json();
+        renderCatalog();
+        renderFeatured();
+      } catch (err) {
+        console.error('Products fetch error:', err);
+      }
+    }
+
+    function filterCategory(cat) {
+      document.querySelectorAll('.cat-tab').forEach(b => {
+        b.classList.remove('text-gold-400', 'font-semibold', 'border-b-2', 'border-gold-400');
+        b.classList.add('text-stone-400');
+      });
+      event.target.classList.add('text-gold-400', 'font-semibold', 'border-b-2', 'border-gold-400');
+      fetchProducts(cat);
+    }
+
+    function renderFeatured() {
+      const featured = products.filter(p => p.is_featured).slice(0, 3);
+      const grid = document.getElementById('featured-products-grid');
+      grid.innerHTML = featured.map(p => productCardHTML(p)).join('');
+    }
+
+    function renderCatalog() {
+      const grid = document.getElementById('catalog-products-grid');
+      grid.innerHTML = products.map(p => productCardHTML(p)).join('');
+    }
+
+    function productCardHTML(p) {
+      return `
+        <div class="bg-charcoal border border-stone-800 rounded overflow-hidden group hover:border-gold-500/40 transition">
+          <div class="relative aspect-square overflow-hidden bg-stone-900 cursor-pointer" onclick="openPDP(${p.id})">
+            <img src="${p.image_url}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+            <button onclick="event.stopPropagation(); toggleWishlist(${p.id})" class="absolute top-3 right-3 bg-obsidian/80 p-2 rounded-full hover:text-gold-400">
+              ♥
+            </button>
+          </div>
+          <div class="p-5">
+            <span class="text-[10px] uppercase tracking-widest text-gold-400">${p.category}</span>
+            <h3 class="font-serif text-lg text-stone-100 font-bold cursor-pointer" onclick="openPDP(${p.id})">${p.title}</h3>
+            <p class="text-xs text-stone-400 mt-1 line-clamp-2">${p.description}</p>
+            <div class="flex justify-between items-center mt-4 pt-3 border-t border-stone-800/80">
+              <span class="font-serif text-gold-400 text-lg">$${parseFloat(p.price).toFixed(2)}</span>
+              <button onclick="addToCart(${p.id})" class="bg-stone-800 hover:bg-gold-500 hover:text-black text-stone-200 text-[10px] uppercase tracking-widest px-3 py-2 transition">Add To Bag</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function openPDP(id) {
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+
+      const container = document.getElementById('pdp-content');
+      container.innerHTML = `
+        <div class="aspect-square bg-stone-900 rounded overflow-hidden border border-stone-800">
+          <img src="${p.image_url}" class="w-full h-full object-cover" />
+        </div>
+        <div>
+          <span class="text-xs uppercase tracking-widest text-gold-400">${p.category}</span>
+          <h1 class="font-serif text-4xl text-stone-100 font-bold mt-1 mb-3">${p.title}</h1>
+          <p class="font-serif text-2xl text-gold-400 mb-6">$${parseFloat(p.price).toFixed(2)}</p>
+          <p class="text-stone-300 text-sm leading-relaxed mb-6">${p.description}</p>
+
+          <div class="bg-obsidian border border-stone-800 p-4 rounded mb-6 space-y-2 text-xs">
+            <p><strong class="text-gold-400">Top Notes:</strong> ${p.top_notes || 'N/A'}</p>
+            <p><strong class="text-gold-400">Heart Notes:</strong> ${p.heart_notes || 'N/A'}</p>
+            <p><strong class="text-gold-400">Base Notes:</strong> ${p.base_notes || 'N/A'}</p>
+          </div>
+
+          <button onclick="addToCart(${p.id})" class="w-full bg-gold-500 text-obsidian py-3 text-xs font-semibold uppercase tracking-widest hover:bg-gold-400 transition">Add To Royal Cart</button>
+        </div>
+      `;
+      navigateTo('pdp');
+    }
+
+    function toggleCart(open) {
+      const backdrop = document.getElementById('cart-drawer-backdrop');
+      const drawer = document.getElementById('cart-drawer');
+      if (open) {
+        backdrop.classList.remove('opacity-0', 'pointer-events-none');
+        drawer.classList.remove('translate-x-full');
+      } else {
+        backdrop.classList.add('opacity-0', 'pointer-events-none');
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      updateCartUI();
+      toggleCart(true);
+    }
+
+    function updateCartUI() {
+      const container = document.getElementById('cart-items');
+      let subtotal = 0;
+      let count = 0;
+
+      container.innerHTML = cart.map((item, idx) => {
+        subtotal += item.price * item.qty;
+        count += item.qty;
+        return `
+          <div class="flex items-center space-x-4 border-b border-stone-800 pb-3">
+            <img src="${item.image_url}" class="w-14 h-14 object-cover rounded bg-stone-900" />
+            <div class="flex-grow">
+              <h4 class="font-serif text-sm text-stone-100">${item.title}</h4>
+              <span class="text-xs text-gold-400">$${item.price} x ${item.qty}</span>
+            </div>
+            <button onclick="removeFromCart(${idx})" class="text-stone-500 hover:text-red-400 text-xs">Remove</button>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('cart-count').innerText = count;
+      document.getElementById('cart-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+
+      const target = 200;
+      const progress = Math.min((subtotal / target) * 100, 100);
+      document.getElementById('shipping-bar').style.width = `${progress}%`;
+      document.getElementById('shipping-progress-percent').innerText = `${Math.round(progress)}%`;
+
+      if (subtotal >= target) {
+        document.getElementById('shipping-progress-text').innerText = '🎉 You Unlocked Free Royal Express Shipping!';
+      } else {
+        document.getElementById('shipping-progress-text').innerText = `Add $${(target - subtotal).toFixed(2)} for Free Shipping`;
+      }
+    }
+
+    function removeFromCart(idx) {
+      cart.splice(idx, 1);
+      updateCartUI();
+    }
+
+    function toggleWishlist(id) {
+      const index = wishlist.indexOf(id);
+      if (index > -1) wishlist.splice(index, 1);
+      else wishlist.push(id);
+      document.getElementById('wishlist-count').innerText = wishlist.length;
+      renderWishlist();
+    }
+
+    function renderWishlist() {
+      const items = products.filter(p => wishlist.includes(p.id));
+      const grid = document.getElementById('wishlist-grid');
+      grid.innerHTML = items.length === 0 
+        ? '<p class="text-center text-stone-500 col-span-3">Your wishlist is currently empty.</p>'
+        : items.map(p => productCardHTML(p)).join('');
+    }
+
+    function switchAuthTab(type) {
+      if (type === 'login') {
+        document.getElementById('form-login').classList.remove('hidden');
+        document.getElementById('form-register').classList.add('hidden');
+      } else {
+        document.getElementById('form-login').classList.add('hidden');
+        document.getElementById('form-register').classList.remove('hidden');
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          localStorage.setItem('ibraq_token', data.token);
+          localStorage.setItem('ibraq_user', JSON.stringify(data.user));
+          authToken = data.token;
+          currentUser = data.user;
+          updateAuthUI();
+          navigateTo('member-lounge');
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Login failed');
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const password = document.getElementById('reg-password').value;
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          localStorage.setItem('ibraq_token', data.token);
+          localStorage.setItem('ibraq_user', JSON.stringify(data.user));
+          authToken = data.token;
+          currentUser = data.user;
+          updateAuthUI();
+          navigateTo('member-lounge');
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Registration failed');
+      }
+    }
+
+    function updateAuthUI() {
+      const btn = document.getElementById('nav-auth-btn');
+      if (currentUser) {
+        btn.innerText = 'Sign Out';
+        btn.onclick = () => {
+          localStorage.removeItem('ibraq_token');
+          localStorage.removeItem('ibraq_user');
+          currentUser = null;
+          authToken = null;
+          updateAuthUI();
+          navigateTo('home');
+        };
+      } else {
+        btn.innerText = 'Sign In';
+        btn.onclick = () => navigateTo('auth');
+      }
+    }
+
+    async function loadMemberLounge() {
+      const lockscreen = document.getElementById('lounge-lockscreen');
+      const dashboard = document.getElementById('lounge-dashboard');
+
+      if (!authToken) {
+        lockscreen.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/member/lounge', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          lockscreen.classList.add('hidden');
+          dashboard.classList.remove('hidden');
+
+          document.getElementById('lounge-welcome').innerText = data.welcomeMessage;
+          document.getElementById('lounge-code').innerText = data.exclusivePromoCode;
+          document.getElementById('lounge-consult').innerText = data.consultationStatus;
+          document.getElementById('lounge-perks').innerHTML = data.perks.map(p => `<li>${p}</li>`).join('');
+        } else {
+          lockscreen.classList.remove('hidden');
+          dashboard.classList.add('hidden');
+        }
+      } catch (err) {
+        console.error('Lounge fetch error:', err);
+      }
+    }
+  </script>
+</body>
+</html>
